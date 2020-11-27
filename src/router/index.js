@@ -1,14 +1,18 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
 
+//商家入驻
 import Settled from '@/views/settled'
-import Prompt from '@/views/settled/prompt'
-import Store from '@/views/settled/store'
-import Qualification from '@/views/settled/qualification'
-import Owner from '@/views/settled/owner'
+import SettledPrompt from '@/views/settled/prompt'
+import SettledStore from '@/views/settled/store'
+import SettledQualification from '@/views/settled/qualification'
+import SettledOwner from '@/views/settled/owner'
 
-import 'normalize.css/normalize.css'
+//帮助中心
+import Help from '@/views/help'
+import HelpLists from '@/views/help/lists'
+import HelpDetail from '@/views/help/detail'
+import HelpCategory from '@/views/help/cate'
 
 Vue.use(Router)
 
@@ -27,21 +31,41 @@ export default new Router({
       children:[
         {
           path:'prompt',
-          component:Prompt
+          component:SettledPrompt
         },
         {
           path:'store',
-          component:Store
+          component:SettledStore
         },
         {
           path:'qualification',
-          component:Qualification
+          component:SettledQualification
         },
         {
           path:'owner',
-          component:Owner
+          component:SettledOwner
         }
       ]
     },
+    {
+      path:'/help',
+      name:'Help',
+      component: Help,
+      redirect: '/help/lists',
+      children:[
+        {
+          path:'lists/:category_id?/:keyword?',
+          component:HelpLists
+        },
+        {
+          path:'detail/:id',
+          component:HelpDetail
+        },
+        {
+          path:'category',
+          component:HelpCategory
+        }
+      ]
+    }
   ]
 })

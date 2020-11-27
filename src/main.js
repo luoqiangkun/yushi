@@ -4,7 +4,9 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import { Container,Header,Main,Footer,PageHeader,Menu,Submenu,MenuItem,Card,Image,Checkbox,CheckboxGroup,Button,Row,Alert,Steps,
-  Step,Input,Radio,RadioGroup,Select,Option,OptionGroup,Form,FormItem,Divider,Cascader,Upload} from 'element-ui'
+  Step,Input,Radio,RadioGroup,Select,Option,OptionGroup,Form,FormItem,Divider,Cascader,Upload,Collapse,CollapseItem,Icon,Dialog,
+  MessageBox,Message } from 'element-ui'
+import 'normalize.css/normalize.css'
 
 Vue.use(Container)
 Vue.use(Header)
@@ -34,8 +36,13 @@ Vue.use(FormItem)
 Vue.use(Divider)
 Vue.use(Cascader)
 Vue.use(Upload)
+Vue.use(Collapse)
+Vue.use(CollapseItem)
+Vue.use(Icon)
+Vue.use(Dialog)
 
 
+Vue.prototype.$alert = MessageBox.alert
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

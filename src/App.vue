@@ -27,4 +27,15 @@ ul {
   padding: 0;
   margin: 0;
 }
+a {
+  color: #333;
+  text-decoration: none;
+}
+.el-collapse-item__content {
+  padding-bottom: 0;
+}
+.el-step.is-simple .el-step__icon-inner[class*=el-icon]:not(.is-status) {
+  font-size: 24px;
+}
+
 </style>

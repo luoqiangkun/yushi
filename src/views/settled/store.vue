@@ -1,5 +1,5 @@
 <template>
-    <div class="store-content">
+    <div class="main-content">
         <el-alert
             title="准确填写牌匾名、地址和类目，市场经理会尽快联系您"
             type="warning"
@@ -7,60 +7,60 @@
         </el-alert>
 
         <el-steps :active="1" simple>
-            <el-step title="步骤 1" icon="el-icon-edit"></el-step>
-            <el-step title="步骤 2" icon="el-icon-upload"></el-step>
-            <el-step title="步骤 3" icon="el-icon-picture"></el-step>
+            <el-step title="店铺信息" icon="el-icon-s-shop"></el-step>
+            <el-step title="资质信息" icon="el-icon-c-scale-to-original"></el-step>
+            <el-step title="法人信息" icon="el-icon-s-custom"></el-step>
         </el-steps>
-        <el-form ref="form" :model="form" label-width="120px" label-position="left">
-            <el-form-item label="店铺门匾名称">
-                <el-input class="width-400" v-model="form.name"></el-input>
+        <el-form ref="form" :model="form" :rules="rules" label-width="130px" label-position="left">
+            <el-form-item label="店铺门匾名称" prop="storeName">
+                <el-input class="width-400" v-model="form.storeName"></el-input>
             </el-form-item>
-            <el-form-item label="店铺经营类目">
-                <el-select class="width-400" v-model="form.region" placeholder="请选择活动区域">
-                <el-option label="区域一" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
+            <el-form-item label="店铺经营分类" prop="storeCategory">
+                <el-select class="width-400" v-model="form.storeCategory" placeholder="请选择经营分类">
+                  <el-option label="美食饮品" value="1"></el-option>
+                  <el-option label="超市百货" value="2"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="联系人">
-                <el-input class="width-400" v-model="form.name"></el-input>
+            <el-form-item label="门店联系人" prop="storeContactPerson">
+                <el-input class="width-400" v-model="form.storeContactPerson" placeholder="请填写门店联系人"></el-input>
             </el-form-item>
-            <el-form-item label="联系方式">
-                <el-input class="width-400" v-model="form.name"></el-input>
+            <el-form-item label="门店联系方式" prop="storeContactNumber">
+                <el-input class="width-400" v-model="form.storeContactNumber" placeholder="请填写门店联系方式"></el-input>
             </el-form-item>
             <el-divider></el-divider>
 
-            <el-form-item label="门店区域">
+            <el-form-item label="门店区域" prop="storeDiscrict">
                 <el-cascader
                     class="width-400"
                     :options="options"
+                    v-model="form.storeDiscrict"
                 >
                 </el-cascader>
             </el-form-item>
-           <el-form-item label="门店详细地址">
-                <el-input class="width-400" v-model="form.name"></el-input>
+           <el-form-item label="门店详细地址" prop="storeAddress">
+                <el-input class="width-400" v-model="form.storeAddress" placeholder="请填写门店详细地址"></el-input>
             </el-form-item>
             <el-form-item label="门店经纬度">
-                <baidu-map class="bm-view" :center="center" :zoom="zoom" @ready="initMap"></baidu-map>
+                <baidu-map class="bm-view" :center="map.center" :zoom="map.zoom" @ready="initMap"></baidu-map>
             </el-form-item>
             <el-divider></el-divider>
 
-            <el-form-item label="照面">
+            <el-form-item label="门店门脸照">
                 <el-upload
                     action="https://jsonplaceholder.typicode.com/posts/"
                     list-type="picture-card"
                 >
                 <i class="el-icon-plus"></i>
-                <div slot="tip" class="el-upload__tip">需拍出完整牌匾、门框（建议正对店铺2米处拍摄</div>
+                <div slot="tip" class="el-upload__tip">需拍出完整牌匾、门框（建议正对店铺2米处拍摄）</div>
                 </el-upload>
             </el-form-item>
-            <el-form-item label="照面">
-                
+            <el-form-item label="门店店内环境照">
                 <el-upload
                     class="test"
                     action="https://jsonplaceholder.typicode.com/posts/"
                     list-type="picture-card"
                 >
-                <div slot="tip" class="el-upload__tip">需拍出完整牌匾、门框（建议正对店铺2米处拍摄</div>
+                <div slot="tip" class="el-upload__tip">需真实反映用餐环境，拍摄整体就餐区域，请勿局部拍摄桌椅</div>
                 <i class="el-icon-plus"></i>
                 
                 </el-upload>
@@ -69,13 +69,12 @@
             <el-divider></el-divider>
 
             <el-form-item>
-                <el-button type="primary" @click="onSubmit">下一步</el-button>
+               <el-button type="primary" @click="onSubmit">下一步</el-button>
             </el-form-item>
         </el-form>
 
     </div>
 </template>
-
 
 <script>
 import Vue from 'vue'
@@ -86,22 +85,52 @@ Vue.use(BaiduMap, {
   export default {
     data() {
       return {
+        rules: {
+          storeName: [
+            { required: true, message: '请输入活动名称', trigger: 'blur' },
+            { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
+          ],
+          storeCategory: [
+            { required: true, message: '请选择店铺分类', trigger: 'change' }
+          ],
+          storeContactPerson: [
+             { required: true, message: '请填写店铺联系人', trigger: 'blur' }
+          ],
+          storeContactNumber: [
+             { required: true, message: '请填写店铺联系方式', trigger: 'blur' }
+          ],
+          storeDiscrict: [
+             { required: true, message: '请选择店铺省市区', trigger: 'change' }
+          ],
+          storeAddress: [
+             { required: true, message: '请填写店铺详细地址', trigger: 'blur' }
+          ],
+          storeDoorPhoto: [
+            { required: true, message: '请上传店铺门脸照片', trigger: 'change' }
+          ],
+          storeInsidePhoto: [
+            { required: true, message: '请上传店内环境照片', trigger: 'change' }
+          ]
+        },
+        form: {
+          storeName: '',
+          storeCategory: '',
+          storeContactPerson: '',
+          storeContactNumber: '',
+          storeDiscrict: '',
+          storeAddress: '',
+          storeDoorPhoto: '',
+          storeInsidePhoto: '',
+          storeLongitude:'',
+          storeLatitude:''
+        },
+        map:{
           center: {
             lng: 109.45744048529967,
             lat: 36.49771311230842
+          },
+          zoom: 13,
         },
-        zoom: 13,
-        form: {
-          name: '',
-          region: '',
-          date1: '',
-          date2: '',
-          delivery: false,
-          type: [],
-          resource: '',
-          desc: ''
-        },
-        value: [],
         options: [
           {
             value: "zhinan",
@@ -382,7 +411,13 @@ Vue.use(BaiduMap, {
             map.enableScrollWheelZoom();
         },
         onSubmit() {
-            console.log('submit!');
+          this.$refs.form.validate((valid) => {
+            if (valid) {
+              this.$router.push("qualification");
+            } else {
+              return false;
+            }
+          });
         }
     }
   }
@@ -392,23 +427,20 @@ Vue.use(BaiduMap, {
 .width-400 {
     width: 400px;
 }
-.store-content {
+.main-content {
     padding: 0 50px;
     text-align: left;
 }
-.store-content .el-alert {
+.main-content .el-alert {
     padding: 14px 16px;
     margin-bottom: 20px;
 }
-.store-content .el-steps {
+.main-content .el-steps {
     margin-bottom: 20px;
 }
 .bm-view {
     width: 700px;
     height: 350px;
 }
-.test .el-upload {
-    width: 100px;
-    height: 100px;
-}
+
 </style>

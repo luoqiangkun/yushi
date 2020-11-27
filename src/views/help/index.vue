@@ -8,12 +8,13 @@
                 <div class="vertical-line"></div>
                 <h3>玉食餐饮</h3>
                 <div class="vertical-line"></div>
-                <h4>商家入驻</h4>
+                <h4>帮助中心</h4>
             </div>
             <div class="header-right">
                 <el-menu mode="horizontal">
                     <el-menu-item index="1">
-                        <router-link to="/help">帮助中心</router-link>
+                        <router-link to="/settled"><el-button type="primary" size="mini">
+                            商家入驻</el-button></router-link>
                     </el-menu-item>
                     <el-submenu index="2" popper-class="site-nav">
                         <template slot="title">15900867236</template>
@@ -22,8 +23,23 @@
                 </el-menu>
             </div>
         </el-header>
-        <el-main>
-            <router-view></router-view>
+        <el-main class="flex-main">
+            <category></category>
+            <div class="main-content">
+                <div class="search-container">
+                    <div class="search-form">
+                        <el-input v-model="input" placeholder="请输入内容" class="width-600">
+                            <template slot="append"><el-button type="primary">搜索</el-button></template>
+                        </el-input>
+                    </div>
+                    <div class="search-lists"></div>
+
+                    <el-divider></el-divider>
+                    <div class="help-container">
+                        <router-view></router-view>
+                    </div>
+                </div>
+            </div>
         </el-main>
         <el-footer style="height:auto">
             <div class="footer-container">
@@ -66,15 +82,24 @@
     </el-container>
 </template>
 <script>
+import category from '@/views/help/cate'
+import lists from '@/views/help/lists'
+
 export default {
+    components:{
+        'category':category,
+    },
     data(){
         return {
-
+            input:''
         }
     }
 }
 </script>
 <style scoped>
+.width-600 {
+    width: 600px;
+}
 .el-header {
     display: flex;
     align-items: center;
@@ -106,13 +131,25 @@ export default {
 .el-main {
     width: 1200px;
     margin: 10px auto;
-    background: #fff;
+    padding: 0;
+    text-align: left;
+    min-height: calc(100vh - 337px);
 }
 .el-footer {
     height: 500px;
     background: rgba(0,0,0,.7);
     color: #fff;
     padding: 50px 0;
+}
+.flex-main {
+    display: flex;
+    justify-content: space-between;
+}
+.main-content {
+    background: #fff;
+    padding: 20px 50px;
+    width: 840px;
+    border: solid 1px #e6e6e6;
 }
 .footer-container {
     width: 900px;
