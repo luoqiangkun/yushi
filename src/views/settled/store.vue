@@ -17,8 +17,12 @@
             </el-form-item>
             <el-form-item label="店铺经营分类" prop="storeCategory">
                 <el-select class="width-400" v-model="form.storeCategory" placeholder="请选择经营分类">
-                  <el-option label="美食饮品" value="1"></el-option>
-                  <el-option label="超市百货" value="2"></el-option>
+                  <el-option
+                    v-for="item in categorylists"
+                    :key="item.category_id"
+                    :label="item.category_name"
+                    :value="item.category_id">
+                  </el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="门店联系人" prop="storeContactPerson">
@@ -32,37 +36,65 @@
             <el-form-item label="门店区域" prop="storeDiscrict">
                 <el-cascader
                     class="width-400"
-                    :options="options"
+                    :options="districtOptions" 
+                    clearable 
                     v-model="form.storeDiscrict"
                 >
                 </el-cascader>
             </el-form-item>
            <el-form-item label="门店详细地址" prop="storeAddress">
-                <el-input class="width-400" v-model="form.storeAddress" placeholder="请填写门店详细地址"></el-input>
+                <el-input class="width-400" v-model="form.storeAddress" placeholder="请填写门店详细地址" name="storeAddress" id="storeAddress"></el-input>
             </el-form-item>
-            <el-form-item label="门店经纬度">
-                <baidu-map class="bm-view" :center="map.center" :zoom="map.zoom" @ready="initMap"></baidu-map>
+            <el-form-item label="门店经纬度" prop="storeLongitude">
+              <div>
+                <el-input
+                  placeholder="经度"
+                  v-model="form.storeLongitude"
+                  style="width:150px">
+                </el-input>
+                <span>--</span>
+                <el-input
+                  placeholder="纬度"
+                  v-model="form.storeLatitude"
+                  style="width:150px">
+                </el-input>
+              </div>
             </el-form-item>
+
+            <el-form-item>
+              <baidu-map class="bm-view" :center="map.center" :zoom="map.zoom" @ready="initMap"></baidu-map>
+            </el-form-item>
+
             <el-divider></el-divider>
 
-            <el-form-item label="门店门脸照">
+            <el-form-item label="门店门脸照" prop="storeDoorPhoto">
                 <el-upload
-                    action="https://jsonplaceholder.typicode.com/posts/"
+                    class="image-uploader"
+                    :action="uploadUrl"
+                    name="upfile"
+                    :on-success="(response,id)=>{handleUploadSuccess(response, 'storeDoorPhoto')}"
+                    :show-file-list="false"
                     list-type="picture-card"
                 >
-                <i class="el-icon-plus"></i>
+                <img class="image" :src="form.storeDoorPhoto" v-if="form.storeDoorPhoto"/>
+                <i class="el-icon-plus" v-else></i>
+                
                 <div slot="tip" class="el-upload__tip">需拍出完整牌匾、门框（建议正对店铺2米处拍摄）</div>
                 </el-upload>
             </el-form-item>
-            <el-form-item label="门店店内环境照">
+            <el-form-item label="门店店内环境照" prop="storeInsidePhoto">
                 <el-upload
-                    class="test"
-                    action="https://jsonplaceholder.typicode.com/posts/"
+                    class="image-uploader"
+                    :action="uploadUrl"
+                    name="upfile"
+                    :on-success="(response,id)=>{handleUploadSuccess(response, 'storeInsidePhoto')}"
+                    :show-file-list="false"
                     list-type="picture-card"
                 >
-                <div slot="tip" class="el-upload__tip">需真实反映用餐环境，拍摄整体就餐区域，请勿局部拍摄桌椅</div>
-                <i class="el-icon-plus"></i>
                 
+                <img class="image" :src="form.storeInsidePhoto" v-if="form.storeInsidePhoto"/>
+                <i class="el-icon-plus" v-else></i>
+                <div slot="tip" class="el-upload__tip">需真实反映用餐环境，拍摄整体就餐区域，请勿局部拍摄桌椅</div>
                 </el-upload>
             </el-form-item>
            
@@ -78,349 +110,197 @@
 
 <script>
 import Vue from 'vue'
+import { storeInfo,storeCategoryLists ,uploadUrl,settled } from "@/api"
+import districtData from '@/data/districts'
 import BaiduMap from 'vue-baidu-map'
 Vue.use(BaiduMap, { 
   ak: 'Yi9XWlwa7sUGSuKGDiPBrS261bMeu6YF'
 })
-  export default {
-    data() {
-      return {
-        rules: {
-          storeName: [
-            { required: true, message: '请输入活动名称', trigger: 'blur' },
-            { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
-          ],
-          storeCategory: [
-            { required: true, message: '请选择店铺分类', trigger: 'change' }
-          ],
-          storeContactPerson: [
-             { required: true, message: '请填写店铺联系人', trigger: 'blur' }
-          ],
-          storeContactNumber: [
-             { required: true, message: '请填写店铺联系方式', trigger: 'blur' }
-          ],
-          storeDiscrict: [
-             { required: true, message: '请选择店铺省市区', trigger: 'change' }
-          ],
-          storeAddress: [
-             { required: true, message: '请填写店铺详细地址', trigger: 'blur' }
-          ],
-          storeDoorPhoto: [
-            { required: true, message: '请上传店铺门脸照片', trigger: 'change' }
-          ],
-          storeInsidePhoto: [
-            { required: true, message: '请上传店内环境照片', trigger: 'change' }
-          ]
-        },
-        form: {
-          storeName: '',
-          storeCategory: '',
-          storeContactPerson: '',
-          storeContactNumber: '',
-          storeDiscrict: '',
-          storeAddress: '',
-          storeDoorPhoto: '',
-          storeInsidePhoto: '',
-          storeLongitude:'',
-          storeLatitude:''
-        },
-        map:{
-          center: {
-            lng: 109.45744048529967,
-            lat: 36.49771311230842
-          },
-          zoom: 13,
-        },
-        options: [
-          {
-            value: "zhinan",
-            label: "指南",
-            children: [
-              {
-                value: "shejiyuanze",
-                label: "设计原则",
-                children: [
-                  {
-                    value: "yizhi",
-                    label: "一致",
-                  },
-                  {
-                    value: "fankui",
-                    label: "反馈",
-                  },
-                  {
-                    value: "xiaolv",
-                    label: "效率",
-                  },
-                  {
-                    value: "kekong",
-                    label: "可控",
-                  },
-                ],
-              },
-              {
-                value: "daohang",
-                label: "导航",
-                children: [
-                  {
-                    value: "cexiangdaohang",
-                    label: "侧向导航",
-                  },
-                  {
-                    value: "dingbudaohang",
-                    label: "顶部导航",
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            value: "zujian",
-            label: "组件",
-            children: [
-              {
-                value: "basic",
-                label: "Basic",
-                children: [
-                  {
-                    value: "layout",
-                    label: "Layout 布局",
-                  },
-                  {
-                    value: "color",
-                    label: "Color 色彩",
-                  },
-                  {
-                    value: "typography",
-                    label: "Typography 字体",
-                  },
-                  {
-                    value: "icon",
-                    label: "Icon 图标",
-                  },
-                  {
-                    value: "button",
-                    label: "Button 按钮",
-                  },
-                ],
-              },
-              {
-                value: "form",
-                label: "Form",
-                children: [
-                  {
-                    value: "radio",
-                    label: "Radio 单选框",
-                  },
-                  {
-                    value: "checkbox",
-                    label: "Checkbox 多选框",
-                  },
-                  {
-                    value: "input",
-                    label: "Input 输入框",
-                  },
-                  {
-                    value: "input-number",
-                    label: "InputNumber 计数器",
-                  },
-                  {
-                    value: "select",
-                    label: "Select 选择器",
-                  },
-                  {
-                    value: "cascader",
-                    label: "Cascader 级联选择器",
-                  },
-                  {
-                    value: "switch",
-                    label: "Switch 开关",
-                  },
-                  {
-                    value: "slider",
-                    label: "Slider 滑块",
-                  },
-                  {
-                    value: "time-picker",
-                    label: "TimePicker 时间选择器",
-                  },
-                  {
-                    value: "date-picker",
-                    label: "DatePicker 日期选择器",
-                  },
-                  {
-                    value: "datetime-picker",
-                    label: "DateTimePicker 日期时间选择器",
-                  },
-                  {
-                    value: "upload",
-                    label: "Upload 上传",
-                  },
-                  {
-                    value: "rate",
-                    label: "Rate 评分",
-                  },
-                  {
-                    value: "form",
-                    label: "Form 表单",
-                  },
-                ],
-              },
-              {
-                value: "data",
-                label: "Data",
-                children: [
-                  {
-                    value: "table",
-                    label: "Table 表格",
-                  },
-                  {
-                    value: "tag",
-                    label: "Tag 标签",
-                  },
-                  {
-                    value: "progress",
-                    label: "Progress 进度条",
-                  },
-                  {
-                    value: "tree",
-                    label: "Tree 树形控件",
-                  },
-                  {
-                    value: "pagination",
-                    label: "Pagination 分页",
-                  },
-                  {
-                    value: "badge",
-                    label: "Badge 标记",
-                  },
-                ],
-              },
-              {
-                value: "notice",
-                label: "Notice",
-                children: [
-                  {
-                    value: "alert",
-                    label: "Alert 警告",
-                  },
-                  {
-                    value: "loading",
-                    label: "Loading 加载",
-                  },
-                  {
-                    value: "message",
-                    label: "Message 消息提示",
-                  },
-                  {
-                    value: "message-box",
-                    label: "MessageBox 弹框",
-                  },
-                  {
-                    value: "notification",
-                    label: "Notification 通知",
-                  },
-                ],
-              },
-              {
-                value: "navigation",
-                label: "Navigation",
-                children: [
-                  {
-                    value: "menu",
-                    label: "NavMenu 导航菜单",
-                  },
-                  {
-                    value: "tabs",
-                    label: "Tabs 标签页",
-                  },
-                  {
-                    value: "breadcrumb",
-                    label: "Breadcrumb 面包屑",
-                  },
-                  {
-                    value: "dropdown",
-                    label: "Dropdown 下拉菜单",
-                  },
-                  {
-                    value: "steps",
-                    label: "Steps 步骤条",
-                  },
-                ],
-              },
-              {
-                value: "others",
-                label: "Others",
-                children: [
-                  {
-                    value: "dialog",
-                    label: "Dialog 对话框",
-                  },
-                  {
-                    value: "tooltip",
-                    label: "Tooltip 文字提示",
-                  },
-                  {
-                    value: "popover",
-                    label: "Popover 弹出框",
-                  },
-                  {
-                    value: "card",
-                    label: "Card 卡片",
-                  },
-                  {
-                    value: "carousel",
-                    label: "Carousel 走马灯",
-                  },
-                  {
-                    value: "collapse",
-                    label: "Collapse 折叠面板",
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            value: "ziyuan",
-            label: "资源",
-            children: [
-              {
-                value: "axure",
-                label: "Axure Components",
-              },
-              {
-                value: "sketch",
-                label: "Sketch Templates",
-              },
-              {
-                value: "jiaohu",
-                label: "组件交互文档",
-              },
-            ],
-          },
+console.log( process.env );
+export default {
+  data() {
+    return {
+      rules: {
+        storeName: [
+          { required: true, message: '请输入活动名称', trigger: 'blur' },
+          { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
         ],
-      }
-    },
-    methods: {
-        initMap({BMap, map}) {
-            this.map = map;
-            // 初始化地图,设置中心点坐标
-            var point = new BMap.Point(119.80250895, 25.48905564);
-            map.centerAndZoom(point, 14);
-            // 添加鼠标滚动缩放
-            map.enableScrollWheelZoom();
+        storeCategory: [
+          { required: true, message: '请选择店铺分类', trigger: 'change' }
+        ],
+        storeContactPerson: [
+          { required: true, message: '请填写店铺联系人', trigger: 'blur' }
+        ],
+        storeContactNumber: [
+          { required: true, message: '请填写店铺联系方式', trigger: 'blur' }
+        ],
+        storeDiscrict: [
+          { required: true, message: '请选择店铺省市区', trigger: 'change' }
+        ],
+        storeAddress: [
+          { required: true, message: '请填写店铺详细地址', trigger: 'blur' }
+        ],
+        storeLongitude: [
+          { required: true, message: '请填写店铺经度', trigger: 'blur' }
+        ],
+        storeLatitude: [
+          { required: true, message: '请填写店铺纬度', trigger: 'blur' }
+        ],
+        storeDoorPhoto: [
+          { required: true, message: '请上传店铺门脸照片', trigger: 'blur' }
+        ],
+        storeInsidePhoto: [
+          { required: true, message: '请上传店内环境照片', trigger: 'blur' }
+        ]
+      },
+      form: {
+        storeName: '',
+        storeCategory: '',
+        storeContactPerson: '',
+        storeContactNumber: '',
+        storeDiscrict: '',
+        storeAddress: '',
+        storeDoorPhoto: '',
+        storeInsidePhoto: '',
+        storeLongitude:'',
+        storeLatitude:''
+      },
+      categorylists:[],
+      districtOptions:[],
+      uploadUrl:uploadUrl,
+      map:{
+        center: {
+          lng: 121.50109,
+          lat: 31.23691
         },
-        onSubmit() {
-          this.$refs.form.validate((valid) => {
-            if (valid) {
-              this.$router.push("qualification");
-            } else {
-              return false;
-            }
-          });
-        }
+        zoom: 3,
+      }
     }
+  },
+  methods: {
+      initMap({BMap, map}) {
+          var _this = this;
+          this.map = map;
+          // 初始化地图,设置中心点坐标
+          var point = new BMap.Point(121.50109, 31.23691);
+          map.centerAndZoom(point, 14);
+          // 添加鼠标滚动缩放
+          map.enableScrollWheelZoom();
+
+          var ac = new BMap.Autocomplete(    //建立一个自动完成的对象
+            {
+              "input" : "storeAddress",
+              "location" : map
+            });
+
+          var myValue;
+          ac.addEventListener("onconfirm", function(e) {    //鼠标点击下拉列表后的事件
+            var _value = e.item.value;
+            myValue = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+            _this.form.storeAddress = myValue;
+            setPlace();
+        });
+
+          function setPlace(){
+            map.clearOverlays();    //清除地图上所有覆盖物
+            function myFun(){
+                var pp = local.getResults().getPoi(0).point;    //获取第一个智能搜索的结果
+                console.info(pp)
+                map.centerAndZoom(pp, 18);
+                map.addOverlay(new BMap.Marker(pp));    //添加标注
+                _this.form.storeLongitude = local.getResults().getPoi(0).point.lat;
+                _this.form.storeLatitude = local.getResults().getPoi(0).point.lng;
+            }
+            var local = new BMap.LocalSearch(map, { //智能搜索
+                onSearchComplete: myFun
+            });
+
+            local.search(myValue);
+          }
+
+      },
+      formatDistrict(){
+        var districtOptions = [];
+        for( var i in districtData[100000]){
+        
+          districtOptions.push({
+            value:i,
+            label:districtData[100000][i],
+            children:[]
+          })
+        }
+
+        for( var n in districtOptions ){
+          if( districtData[districtOptions[n].value] ){
+            for( var m in districtData[districtOptions[n].value] ){
+              districtOptions[n].children.push({
+                value:m,
+                label:districtData[districtOptions[n].value][m],
+                children:[]
+              })
+            }
+          }
+        }
+
+        for( var i in districtOptions ){
+          for( var m in districtOptions[i].children ){
+            if( districtData[districtOptions[i].children[m].value] ){
+              for( var n in districtData[districtOptions[i].children[m].value] ){
+                districtOptions[i].children[m].children.push({
+                  value:n,
+                  label:districtData[districtOptions[i].children[m].value][n]
+                })
+              }
+            }
+          }
+        }
+        this.districtOptions = districtOptions;
+      },
+      handleUploadSuccess(res,id) {
+        if( res.status === 200 ){
+           this.form[id] = res.data.url
+        }	        
+     	},
+      storeInfo(){
+        storeInfo();
+      },
+      storeCategoryLists(){
+        storeCategoryLists().then( res => {
+          if( res.status === 200 ){
+            this.categorylists = res.data.items;
+          }else{
+
+          }
+        });
+      },
+      onSubmit() {
+        this.$refs.form.validate((valid) => {
+          if (valid) {
+            settled(this.form).then(res => {
+              if(res.status == 200){
+                this.$message({
+                  message: res.msg,
+                  type: 'success'
+                });
+                this.$router.push("qualification");
+              }else{
+                this.$message.error(res.msg);
+              }
+            })
+            
+          } else {
+            return false;
+          }
+        });
+      }
+  },
+  created(){
+    this.storeCategoryLists()
+    this.storeInfo()
+    this.formatDistrict()
+
   }
+}
 </script>
 
 <style scoped>
@@ -441,6 +321,10 @@ Vue.use(BaiduMap, {
 .bm-view {
     width: 700px;
     height: 350px;
+    margin-top: 10px;
 }
-
+.image-uploader .image {
+  width: 100%;
+  height:100%;
+}
 </style>

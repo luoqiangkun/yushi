@@ -3,10 +3,17 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import './assets/theme/index.css'
 import { Container,Header,Main,Footer,PageHeader,Menu,Submenu,MenuItem,Card,Image,Checkbox,CheckboxGroup,Button,Row,Alert,Steps,
   Step,Input,Radio,RadioGroup,Select,Option,OptionGroup,Form,FormItem,Divider,Cascader,Upload,Collapse,CollapseItem,Icon,Dialog,
   MessageBox,Message } from 'element-ui'
 import 'normalize.css/normalize.css'
+import axios from 'axios'
+import Vuex from 'vuex'
+import store from './store'
+
+Vue.prototype.$ELEMENT = { size: 'small', zIndex: 3000 }
+Vue.use(Vuex)
 
 Vue.use(Container)
 Vue.use(Header)
@@ -41,14 +48,17 @@ Vue.use(CollapseItem)
 Vue.use(Icon)
 Vue.use(Dialog)
 
-
 Vue.prototype.$alert = MessageBox.alert
+Vue.prototype.$axios = axios
 Vue.config.productionTip = false
+
+import './perm' // permission control
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

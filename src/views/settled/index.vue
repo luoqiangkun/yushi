@@ -16,7 +16,7 @@
                         <router-link to="/help">帮助中心</router-link>
                     </el-menu-item>
                     <el-submenu index="2" popper-class="site-nav">
-                        <template slot="title">15900867236</template>
+                        <template slot="title">{{profile.userName}}</template>
                         <el-menu-item index="2-1">退出登陆</el-menu-item>
                     </el-submenu>
                 </el-menu>
@@ -71,6 +71,36 @@ export default {
         return {
 
         }
+    },
+    computed: {
+        profile () {
+            return this.$store.state.profile
+        },
+        settled () {
+            return this.$store.state.settled
+        }
+    },
+    methods:{
+        settledData(){
+            return this.$store.dispatch('settled/settledData')
+        },
+        async redirect(){
+            if( this.settled.settledStep == -1 ){
+               await this.settledData();
+            }
+            if( this.settled.settledStep == 0 ){
+                this.$router.push("/settled/prompt");
+            } else if( this.settled.settledStep == 1 ){
+                this.$router.push("/settled/store");
+            } else if( this.settled.settledStep == 2 ){
+                this.$router.push("/settled/qualification");
+            } else if( this.settled.settledStep == 3 ){
+                this.$router.push("/settled/owner");
+            }
+        }
+    },
+    created(){
+        this.redirect();
     }
 }
 </script>

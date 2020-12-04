@@ -17,7 +17,7 @@
                             商家入驻</el-button></router-link>
                     </el-menu-item>
                     <el-submenu index="2" popper-class="site-nav">
-                        <template slot="title">15900867236</template>
+                        <template slot="title">{{profile.userName}}</template>
                         <el-menu-item index="2-1">退出登陆</el-menu-item>
                     </el-submenu>
                 </el-menu>
@@ -89,10 +89,21 @@ export default {
     components:{
         'category':category,
     },
+    computed: {
+        profile () {
+            return this.$store.state.profile
+        }
+    },
     data(){
         return {
             input:''
         }
+    },
+    methods:{
+    
+    },
+    created(){
+        console.log( this.$store.state );
     }
 }
 </script>

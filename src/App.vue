@@ -31,6 +31,11 @@ a {
   color: #333;
   text-decoration: none;
 }
+.el-upload--picture-card {
+  width: 120px;
+  height: 120px;
+  line-height: 120px;
+}
 .el-collapse-item__content {
   padding-bottom: 0;
 }

@@ -17,7 +17,7 @@
                 <router-link to="/help/detail/5">付款码支付接入方法指引</router-link>
             </li>
              <li>
-                <router-link to="/help/detail/6">付款码支付接入方法指引</router-link>
+                <router-link to="/help/detail/6">付款码支付接入方法指引1</router-link>
             </li>
         </ul>
     </div>

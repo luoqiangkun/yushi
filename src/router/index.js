@@ -27,7 +27,7 @@ export default new Router({
       path:'/settled',
       name:'Settled',
       component: Settled,
-      redirect: '/settled/prompt',
+      //redirect: '/settled/prompt',
       children:[
         {
           path:'prompt',
