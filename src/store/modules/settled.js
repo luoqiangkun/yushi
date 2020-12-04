@@ -1,24 +1,21 @@
 
 import { settledData } from '@/api'
 const state = {
-    settledStep:-1,
-    storeData:{},
-    qualificationData:{},
-    ownerData:{}
+    settledStep:-1
 }
 const mutations = {
   SET_SETTLED: (state, settled) => {
       let settledStep = 0
-      if( settled.storeData ){
-        state.storeData = settled.storeData
+      if( settled.store ){
+        state.store = settled.store
         settledStep = 1
       }
-      if( settled.qualificationData ){
-        state.qualificationData = settled.qualificationData
+      if( settled.qualification ){
+        state.qualification = settled.qualification
         settledStep = 2
       }
-      if( settled.ownerData ){
-        state.ownerData = settled.ownerData
+      if( settled.owner ){
+        state.owner = settled.owner
         settledStep = 3
       }
       state.settledStep = settledStep

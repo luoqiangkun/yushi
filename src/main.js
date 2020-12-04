@@ -48,7 +48,9 @@ Vue.use(CollapseItem)
 Vue.use(Icon)
 Vue.use(Dialog)
 
+Vue.prototype.$msgbox = MessageBox;
 Vue.prototype.$alert = MessageBox.alert
+Vue.prototype.$message = Message;
 Vue.prototype.$axios = axios
 Vue.config.productionTip = false
 

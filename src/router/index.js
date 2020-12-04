@@ -1,12 +1,19 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+Vue.use(Router)
+// router文件夹-->index.js文件
+//cv以下代码解决路由地址重复的报错问题(一劳永逸)
+const originalPush = Router.prototype.push
+   Router.prototype.push = function push(location) {
+   return originalPush.call(this, location).catch(err => err)
+}
 
 //商家入驻
 import Settled from '@/views/settled'
 import SettledPrompt from '@/views/settled/prompt'
 import SettledStore from '@/views/settled/store'
-import SettledQualification from '@/views/settled/qualification'
-import SettledOwner from '@/views/settled/owner'
+import SettledCompany from '@/views/settled/company'
+import SettledLegal from '@/views/settled/legal'
 
 //帮助中心
 import Help from '@/views/help'
@@ -38,12 +45,12 @@ export default new Router({
           component:SettledStore
         },
         {
-          path:'qualification',
-          component:SettledQualification
+          path:'company',
+          component:SettledCompany
         },
         {
-          path:'owner',
-          component:SettledOwner
+          path:'legal',
+          component:SettledLegal
         }
       ]
     },

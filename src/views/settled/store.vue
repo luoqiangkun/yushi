@@ -110,19 +110,18 @@
 
 <script>
 import Vue from 'vue'
-import { storeInfo,storeCategoryLists ,uploadUrl,settled } from "@/api"
+import { storeCategoryLists ,uploadUrl,settled } from "@/api"
 import districtData from '@/data/districts'
 import BaiduMap from 'vue-baidu-map'
 Vue.use(BaiduMap, { 
   ak: 'Yi9XWlwa7sUGSuKGDiPBrS261bMeu6YF'
 })
-console.log( process.env );
 export default {
   data() {
     return {
       rules: {
         storeName: [
-          { required: true, message: '请输入活动名称', trigger: 'blur' },
+          { required: true, message: '请输入门店名称', trigger: 'blur' },
           { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
         ],
         storeCategory: [
@@ -177,6 +176,12 @@ export default {
       }
     }
   },
+  computed: {
+      settled () {
+          return this.$store.state.settled
+      }
+  },
+  
   methods: {
       initMap({BMap, map}) {
           var _this = this;
@@ -197,8 +202,10 @@ export default {
           ac.addEventListener("onconfirm", function(e) {    //鼠标点击下拉列表后的事件
             var _value = e.item.value;
             myValue = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
-            _this.form.storeAddress = myValue;
-            setPlace();
+  
+           _this.form.storeAddress = myValue;
+           setPlace();
+            
         });
 
           function setPlace(){
@@ -256,48 +263,49 @@ export default {
         }
         this.districtOptions = districtOptions;
       },
+      formatFormDistrict(storeDiscrict){
+         var newDistrice = []
+          for( var i in storeDiscrict ){
+            newDistrice.push(storeDiscrict[i].toString())
+          }
+          return newDistrice
+      },
       handleUploadSuccess(res,id) {
         if( res.status === 200 ){
            this.form[id] = res.data.url
         }	        
      	},
-      storeInfo(){
-        storeInfo();
-      },
       storeCategoryLists(){
         storeCategoryLists().then( res => {
           if( res.status === 200 ){
             this.categorylists = res.data.items;
-          }else{
-
           }
-        });
+        })
       },
       onSubmit() {
+        this.form.key = 'store';
         this.$refs.form.validate((valid) => {
           if (valid) {
             settled(this.form).then(res => {
               if(res.status == 200){
-                this.$message({
-                  message: res.msg,
-                  type: 'success'
-                });
-                this.$router.push("qualification");
+                this.$router.push("company")
               }else{
-                this.$message.error(res.msg);
+                this.$message.error(res.msg)
               }
-            })
-            
-          } else {
-            return false;
+            }) 
           }
-        });
+        })
       }
   },
   created(){
     this.storeCategoryLists()
-    this.storeInfo()
     this.formatDistrict()
+    if(this.settled.store){
+      this.form = this.settled.store
+      if(this.form.storeDiscrict && this.form.storeDiscrict.length > 0){
+        this.form.storeDiscrict = this.formatFormDistrict(this.form.storeDiscrict);
+      }
+    }
 
   }
 }

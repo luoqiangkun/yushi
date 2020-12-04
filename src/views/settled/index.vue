@@ -81,26 +81,27 @@ export default {
         }
     },
     methods:{
-        settledData(){
-            return this.$store.dispatch('settled/settledData')
-        },
-        async redirect(){
-            if( this.settled.settledStep == -1 ){
-               await this.settledData();
-            }
+        redirect(){
             if( this.settled.settledStep == 0 ){
                 this.$router.push("/settled/prompt");
             } else if( this.settled.settledStep == 1 ){
                 this.$router.push("/settled/store");
             } else if( this.settled.settledStep == 2 ){
-                this.$router.push("/settled/qualification");
+                this.$router.push("/settled/company");
             } else if( this.settled.settledStep == 3 ){
-                this.$router.push("/settled/owner");
+                this.$router.push("/settled/legal");
             }
         }
     },
     created(){
-        this.redirect();
+        if( this.settled.settledStep == -1  ){
+            this.$store.dispatch('settled/settledData')
+            .then(res => {
+                this.redirect();
+            })
+        } else {
+            this.redirect();
+        }
     }
 }
 </script>
