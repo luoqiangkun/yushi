@@ -39,7 +39,7 @@ router.beforeEach(async(to, from, next) => {
       // other pages that do not have permission to access are redirected to the login page.
       //next(`/login?redirect=${to.path}`)
       await store.dispatch('auth/login',{
-        user_account:'admin',
+        user_account:'小张12',
         user_password:123456
       })
       next()

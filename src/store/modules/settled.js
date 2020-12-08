@@ -10,12 +10,12 @@ const mutations = {
         state.store = settled.store
         settledStep = 1
       }
-      if( settled.qualification ){
-        state.qualification = settled.qualification
+      if( settled.company ){
+        state.company = settled.company
         settledStep = 2
       }
-      if( settled.owner ){
-        state.owner = settled.owner
+      if( settled.legal ){
+        state.legal = settled.legal
         settledStep = 3
       }
       state.settledStep = settledStep
@@ -44,6 +44,9 @@ const actions = {
         reject(error)
       })
     })
+  },
+  setStep({ commit, state },step){
+    commit('SET_STEP', step)
   }
 }
 export default {

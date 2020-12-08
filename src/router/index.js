@@ -14,12 +14,14 @@ import SettledPrompt from '@/views/settled/prompt'
 import SettledStore from '@/views/settled/store'
 import SettledCompany from '@/views/settled/company'
 import SettledLegal from '@/views/settled/legal'
+import SettledResult from '@/views/settled/result'
 
 //帮助中心
 import Help from '@/views/help'
 import HelpLists from '@/views/help/lists'
 import HelpDetail from '@/views/help/detail'
 import HelpCategory from '@/views/help/cate'
+
 
 Vue.use(Router)
 
@@ -51,6 +53,10 @@ export default new Router({
         {
           path:'legal',
           component:SettledLegal
+        },
+        {
+          path:'result',
+          component:SettledResult
         }
       ]
     },

@@ -101,6 +101,7 @@
             <el-divider></el-divider>
 
             <el-form-item>
+              <router-link to="/settled/prompt"><el-button>上一步</el-button></router-link>  
                <el-button type="primary" @click="onSubmit">下一步</el-button>
             </el-form-item>
         </el-form>
@@ -306,6 +307,8 @@ export default {
         this.form.storeDiscrict = this.formatFormDistrict(this.form.storeDiscrict);
       }
     }
+
+    this.$store.dispatch('settled/setStep',1)
 
   }
 }

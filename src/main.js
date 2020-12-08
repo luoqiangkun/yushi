@@ -4,9 +4,9 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import './assets/theme/index.css'
-import { Container,Header,Main,Footer,PageHeader,Menu,Submenu,MenuItem,Card,Image,Checkbox,CheckboxGroup,Button,Row,Alert,Steps,
+import { Container,Header,Main,Footer,PageHeader,Menu,Submenu,MenuItem,Card,Image,Checkbox,CheckboxGroup,Button,Alert,Steps,
   Step,Input,Radio,RadioGroup,Select,Option,OptionGroup,Form,FormItem,Divider,Cascader,Upload,Collapse,CollapseItem,Icon,Dialog,
-  MessageBox,Message } from 'element-ui'
+  MessageBox,Message,Row,Col,Table,TableColumn } from 'element-ui'
 import 'normalize.css/normalize.css'
 import axios from 'axios'
 import Vuex from 'vuex'
@@ -47,6 +47,10 @@ Vue.use(Collapse)
 Vue.use(CollapseItem)
 Vue.use(Icon)
 Vue.use(Dialog)
+Vue.use(Row)
+Vue.use(Col)
+Vue.use(Table)
+Vue.use(TableColumn)
 
 Vue.prototype.$msgbox = MessageBox;
 Vue.prototype.$alert = MessageBox.alert

@@ -6,35 +6,35 @@
             </div>
             <div class="image-container">
                 <div class="image-box">
-                    <el-image src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1606390961877&di=749be4c808be02ae8eff6d28b2324183&imgtype=0&src=http%3A%2F%2Fimg3.tbcdn.cn%2Ftfscom%2Fi1%2F1916563745%2FTB23ZfwnpXXXXcQXXXXXXXXXXXX_%2521%25211916563745.jpg" style="height:200px"></el-image>
+                    <el-image :src="require('@/assets/image/1.png')"></el-image>
                     <p>门脸照片 <span>(需拍出完整牌匾、门框，建议距离门店2米外拍摄)</span> </p>
                     
                 </div>  
                 <div class="image-box">
-                    <el-image src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1606390961877&di=749be4c808be02ae8eff6d28b2324183&imgtype=0&src=http%3A%2F%2Fimg3.tbcdn.cn%2Ftfscom%2Fi1%2F1916563745%2FTB23ZfwnpXXXXcQXXXXXXXXXXXX_%2521%25211916563745.jpg" style="height:200px"></el-image>
+                    <el-image :src="require('@/assets/image/2.png')"></el-image>
                     <p>店内环境照片 <span>(需真实反映用餐环境，拍摄整体就餐区域，请勿局部拍摄桌椅)</span> </p>
                 </div>   
                 <div class="image-box">
-                    <el-image src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1606468816327&di=3c58cf53ebc3474b2ef93864abf69930&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20190224%2F58596c8c109a45098ba9b0cd6a29918d.jpeg" style="height:200px"></el-image>
+                    <el-image :src="require('@/assets/image/3.png')"></el-image>
                     <p>身份证正面照片 <span>(需清晰拍摄身份证信息拍摄完整，不可有遮盖物遮挡)</span> </p>
                 </div>  
                 <div class="image-box">
-                    <el-image src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1606468816327&di=3c58cf53ebc3474b2ef93864abf69930&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20190224%2F58596c8c109a45098ba9b0cd6a29918d.jpeg" style="height:200px"></el-image>
+                    <el-image :src="require('@/assets/image/4.png')"></el-image>
                     <p>身份证反面照片 <span>(需清晰拍摄身份证信息拍摄完整，不可有遮盖物遮挡)</span> </p>
                 </div>  
                 <div class="image-box">
-                    <el-image src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1606468702012&di=d088822670ebc5492bdf82ed9d7b1ea9&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20180419%2F3e786ccab26440cbbb2b5c60127ab160.jpeg" style="height:200px"></el-image>
+                    <el-image :src="require('@/assets/image/5.png')"></el-image>
                     <p>营业执照照片 <span>(需清晰拍摄身份证信息拍摄完整，不可有遮盖物遮挡)</span> </p>
                 </div>   
                 <div class="image-box">
-                    <el-image src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1606468702012&di=d088822670ebc5492bdf82ed9d7b1ea9&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20180419%2F3e786ccab26440cbbb2b5c60127ab160.jpeg" style="height:200px"></el-image>
+                    <el-image :src="require('@/assets/image/6.png')"></el-image>
                     <p>经营许可证照片 <span>(需清晰拍摄身份证信息拍摄完整，不可有遮盖物遮挡)</span> </p>
                 </div>  
             </div>
             <div class="submit-box">
                 <el-row>
                     <el-checkbox v-model="aggressive">
-                        <a href="javascript:;" @click="visible = !visible">我已阅读并同意《玉食餐饮入驻协议》</a>
+                        <a href="javascript:;" @click="visible = !visible">我已阅读并同意《外卖商家入驻协议》</a>
                     </el-checkbox>
                 </el-row>
                 <el-row>
@@ -94,6 +94,9 @@ export default {
                 });
             }
         }
+    },
+    created(){
+        this.$store.dispatch('settled/setStep',0)
     }
 }
 </script>

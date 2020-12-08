@@ -36,11 +36,21 @@ a {
   height: 120px;
   line-height: 120px;
 }
+.el-upload--picture-card img {
+  width: 100%;
+  height:100%;
+}
+.image-IDCard .el-upload--picture-card {
+  width: 180px;
+}
 .el-collapse-item__content {
   padding-bottom: 0;
 }
 .el-step.is-simple .el-step__icon-inner[class*=el-icon]:not(.is-status) {
   font-size: 24px;
+}
+.router-link-active {
+  color: #FF5C00;
 }
 
 </style>

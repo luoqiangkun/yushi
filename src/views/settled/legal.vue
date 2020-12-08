@@ -22,7 +22,7 @@
             </el-form-item>
             <el-form-item label="身份证正面照" prop="legalIdCardFront">
                 <el-upload
-                    class="image-uploader"
+                    class="image-IDCard"
                     :action="uploadUrl"
                     name="upfile"
                     :on-success="(response,id)=>{handleUploadSuccess(response, 'legalIdCardFront')}"
@@ -36,12 +36,13 @@
             </el-form-item>
             <el-form-item label="身份证反面照" prop="legalIdCardBack">
                 <el-upload
-                    class="image-uploader"
+                    class="image-IDCard"
                     :action="uploadUrl"
                     name="upfile"
                     :on-success="(response,id)=>{handleUploadSuccess(response, 'legalIdCardBack')}"
                     :show-file-list="false"
                     list-type="picture-card"
+                    style="width:180px"
                 >
                     <img class="image" :src="form.legalIdCardBack" v-if="form.legalIdCardBack"/>
                     <i class="el-icon-plus" v-else></i>
@@ -60,6 +61,8 @@
             <el-divider></el-divider>
 
             <el-form-item>
+                <router-link to="/settled/company"><el-button>上一步</el-button></router-link>
+                
                 <el-button type="primary" @click="onSubmit">确认</el-button>
             </el-form-item>
         </el-form>
@@ -136,9 +139,10 @@ export default {
         }
     },
     created(){
-       if(this.settled.legal){
+        if(this.settled.legal){
             this.form = this.settled.legal
         }
+        this.$store.dispatch('settled/setStep',3)
     }
 }
 </script>
@@ -157,8 +161,6 @@ export default {
 .main-content .el-steps {
     margin-bottom: 20px;
 }
-.image-uploader .image {
-  width: 100%;
-  height:100%;
-}
+
+
 </style>

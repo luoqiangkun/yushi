@@ -35,11 +35,10 @@ export function userInfo() {
 }
 
 //获取店铺信息
-export function storeInfo(data) {
+export function storeInfo() {
     return request({
-      url: 'catering.php?ctl=Store_Base&met=get&typ=json',
-      method: 'get',
-      data
+      url: 'index.php?ctl=Store_Base&met=get&typ=json',
+      method: 'get'
     })
 }
 
@@ -70,3 +69,38 @@ export function settled(data){
 
 //上传地址
 export var uploadUrl = process.env.UPLOAD_URL + 'index.php?ctl=Media&met=uploadImage&typ=json'
+
+
+//底部信息
+export function footerData(){
+  return request({
+    url: 'index.php?ctl=Store&met=footerData&typ=json',
+    method: 'get'
+  })
+}
+
+//帮助分类
+export function helpCategoryTree(){
+  return request({
+    url: 'catering.php?ctl=Help_Category&met=tree&typ=json',
+    method: 'get'
+  })
+}
+
+//帮助列表
+export function helpList(params){
+  return request({
+    url: 'catering.php?ctl=Help_Base&met=lists&typ=json',
+    method: 'get',
+    params
+  })
+}
+
+//帮助内容
+export function helpDetail(params){
+  return request({
+    url: 'catering.php?ctl=Help_Base&met=detail&typ=json',
+    method: 'get',
+    params
+  })
+}

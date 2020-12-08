@@ -89,6 +89,10 @@
             <el-divider></el-divider>
 
             <el-form-item>
+                <router-link to="/settled/store">
+                    <el-button>上一步</el-button>
+                </router-link>
+                
                 <el-button type="primary" @click="onSubmit">下一步</el-button>
             </el-form-item>
         </el-form>
@@ -196,12 +200,12 @@ export default {
             }	        
      	},
         onSubmit() {
-            this.form.key = 'qualification'
+            this.form.key = 'company'
             this.$refs.form.validate((valid) => {
             if (valid) {
                 settled(this.form).then(res => {
                 if(res.status == 200){
-                    this.$router.push("owner")
+                    this.$router.push("legal")
                 }else{
                     this.$message.error(res.msg)
                 }
@@ -212,12 +216,13 @@ export default {
     },
     created(){
         this.formatDistrict();
-        if(this.settled.qualification){
-            this.form = this.settled.qualification
+        if(this.settled.company){
+            this.form = this.settled.company
             if(this.form.companyAddress && this.form.companyAddress.length > 0){
                 this.form.companyAddress = this.formatFormDistrict(this.form.companyAddress)
             }
         }
+        this.$store.dispatch('settled/setStep',2)
     }
 }
 </script>
