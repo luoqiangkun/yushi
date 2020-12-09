@@ -32,11 +32,16 @@ export default {
         },
         settled () {
             return this.$store.state.settled
+        },
+        store(){
+            return this.$store.state.common.store
         }
     },
     methods:{
         redirect(){
-            if( this.settled.settledStep == 0 ){
+            if( this.store.store_id ){
+                this.$router.push("/settled/result");
+            } else if( this.settled.settledStep == 0 ){
                 this.$router.push("/settled/prompt");
             } else if( this.settled.settledStep == 1 ){
                 this.$router.push("/settled/store");
@@ -48,15 +53,27 @@ export default {
         }
     },
     created(){
-        if( this.settled.settledStep == -1  ){
-            this.$store.dispatch('settled/settledData')
-            .then(res => {
-                this.redirect();
-            })
-        } else {
-            this.redirect();
-        }
-    }
+        //this.redirect();
+        // if( this.settled.settledStep == -1  ){
+        //     this.$store.dispatch('settled/settledData')
+        //     .then(res => {
+        //         this.redirect();
+        //     })
+        // } else {
+        //     this.redirect();
+        // }
+    },
+    beforeRouteEnter (to, from, next) {
+       next(async(vm) => {
+            if( !vm.$store.getters.common.store.loaded ){
+                await vm.$store.dispatch('common/storeInfo')
+            }
+            if( !vm.$store.getters.common.store.store_id ){
+               await vm.$store.dispatch('settled/settledData')
+            }
+            vm.redirect();
+        });
+    },
 }
 </script>
 <style scoped>

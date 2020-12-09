@@ -37,7 +37,7 @@ export function userInfo() {
 //获取店铺信息
 export function storeInfo() {
     return request({
-      url: 'index.php?ctl=Store_Base&met=get&typ=json',
+      url: 'index.php?ctl=Store&met=self&typ=json',
       method: 'get'
     })
 }

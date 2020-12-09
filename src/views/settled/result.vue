@@ -1,6 +1,6 @@
 <template>
     <div class="result-container">
-         <el-steps :active="3" simple>
+         <el-steps :active="active" simple>
             <el-step title="店铺信息" icon="el-icon-s-shop"></el-step>
             <el-step title="资质信息" icon="el-icon-c-scale-to-original"></el-step>
             <el-step title="法人信息" icon="el-icon-s-custom"></el-step>
@@ -8,7 +8,25 @@
         </el-steps>
 
         <div class="alert-box" style="margin-top:20px">
-          
+            <el-alert
+                title="店铺已开通"
+                type="success"
+                description="你的店铺已开通，可前往外卖系统商家管理后台管理自己的店铺"
+                show-icon
+                :center="center"
+                :closable="false"
+                v-if="store.store_is_open == 1">
+            </el-alert>
+
+            <el-alert
+                title="待完善资料"
+                type="success"
+                description="你的商家入驻申请资料不全，请尽快完善资料，重新提交"
+                show-icon
+                :center="center"
+                :closable="false"
+                v-else-if="store.store_state_id == 3210">
+            </el-alert>
 
             <el-alert
                 title="等待平台审核"
@@ -16,7 +34,48 @@
                 description="你的商家入驻申请已提交，请耐心等待平台审核，预计会在2个工作日内得到审核结果"
                 show-icon
                 :center="center"
-                :closable="false">
+                :closable="false"
+                v-else-if="store.store_state_id == 3220">
+            </el-alert>
+
+            <el-alert
+                title="平台审核通过"
+                type="success"
+                description="你的商家入驻申请已通过，等待平台为您开通店铺"
+                show-icon
+                :center="center"
+                :closable="false"
+                v-else-if="store.store_state_id == 3240">
+            </el-alert>
+
+            <el-alert
+                title="平台审核不通过"
+                type="error"
+                description="你的商家入驻申请未通过，请参照审核失败原因进行修改"
+                show-icon
+                :center="center"
+                :closable="false"
+                v-else-if="store.store_state_id == 3230">
+            </el-alert>
+
+             <el-alert
+                title="店铺已关闭"
+                type="error"
+                description="你的店铺已关闭，如有疑问，可找平台客服进行沟通"
+                show-icon
+                :center="center"
+                :closable="false"
+                v-else-if="store.store_is_open == 0">
+            </el-alert>
+
+             <el-alert
+                title="等待平台审核"
+                type="info"
+                description="你的商家入驻申请已提交，请耐心等待平台审核，预计会在2个工作日内得到审核结果"
+                show-icon
+                :center="center"
+                :closable="false"
+                v-else>
             </el-alert>
 
         </div>
@@ -36,27 +95,22 @@
 export default {
     data(){
         return {
-          tableData: [{
-            date: '2016-05-02',
-            name: '上海市普陀区金沙江路 1518 弄'
-          }, {
-            date: '2016-05-04',
-            name: '王小虎'
-          }, {
-            date: '2016-05-01',
-            name: '王小虎'
-          }, {
-            date: '2016-05-03',
-            name: '上海市普陀区金沙江路 1516 弄'
-          }],
-          center:false
+            active:3,
+            center:false
+        }
+    },
+    computed: {
+        store(){
+            return this.$store.state.common.store
         }
     },
     methods:{
         
     },
     created(){
-        
+        if(this.store.store_state_id > 3220){
+            this.active = 4
+        }
     }
 }
 </script>

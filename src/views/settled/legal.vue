@@ -129,7 +129,7 @@ export default {
             if (valid) {
                 settled(this.form).then(res => {
                 if(res.status == 200){
-                    this.$router.push("legal")
+                    this.$router.push("result")
                 }else{
                     this.$message.error(res.msg)
                 }

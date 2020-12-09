@@ -39,11 +39,10 @@ const actions = {
   logout({ commit, state, dispatch }) {
      return new Promise((resolve, reject) => {
       logout().then(response => {
-        data = response.data;
         delCookie('uid')
         delCookie('uid')
         commit('CLEAT_AUTH')
-        resolve(data)
+        resolve(response)
       }).catch(error => {
         reject(error)
       })

@@ -6,6 +6,7 @@ const whiteList = ['/login'] // no redirect whitelist
 router.beforeEach(async(to, from, next) => {
   // determine whether the user has logged in
   const ukey = getCookie('ukey'); 
+ 
   if (ukey) {
     if (to.path === '/login') {
       // if is logged in, redirect to the home page
@@ -38,11 +39,16 @@ router.beforeEach(async(to, from, next) => {
     } else {
       // other pages that do not have permission to access are redirected to the login page.
       //next(`/login?redirect=${to.path}`)
-      await store.dispatch('auth/login',{
-        user_account:'小张12',
-        user_password:123456
-      })
-      next()
+      try{
+        // await store.dispatch('auth/login',{
+        //   user_account:'timor',
+        //   user_password:111111
+        // })
+        // next()
+      } catch (error) {
+        console.log(error)
+      }
+     
     }
   }
 })
