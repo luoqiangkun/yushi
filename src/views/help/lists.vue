@@ -13,7 +13,7 @@
 
         <ul class="help-lists" v-if="lists.length > 0">
             <li :key="index" v-for="(item,index) in lists">
-                <router-link :to="'/help/detail/' + item.help_id">{{item.help_title}}</router-link>
+                <router-link :to="'/help/detail/' + item.help_id" replace>{{item.help_title}}</router-link>
             </li>
         </ul>
         <div class="result no-result" v-else>

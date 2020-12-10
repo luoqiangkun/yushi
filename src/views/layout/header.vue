@@ -11,7 +11,7 @@
         </div>
         <div class="header-right">
             <el-menu mode="horizontal">
-                <el-menu-item index="100">
+                <el-menu-item index="99">
                     <a href="javascript:;" @click="redirectShop">商城首页</a>
                 </el-menu-item>
                 <el-menu-item :key="index" v-for="(item,index) in menus">

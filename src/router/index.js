@@ -71,7 +71,7 @@ export default new Router({
           component:HelpLists
         },
         {
-          path:'detail/:id',
+          path:'detail/:id/:rand?',
           component:HelpDetail
         },
         {

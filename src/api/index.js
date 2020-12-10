@@ -1,5 +1,15 @@
 import request from '@/utils/request'
 
+//check
+export function check() {
+  // return request({
+  //   url: 'account.php?ctl=Login&met=doLogin&typ=json',
+  //   method: 'post',
+  //   data:{redirect:window.location.href}
+  // })
+  window.location.href =  process.env.API_URL + 'index.php?ctl=Login&met=check&redirect=' + process.env.API_URL;
+}
+
 //用户登陆
 export function login(data) {
     return request({

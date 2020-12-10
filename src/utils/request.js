@@ -5,8 +5,8 @@ import { getCookie } from '@/utils/cookie'
 
 // create an axios instance
 const request = axios.create({
-    //baseURL: process.env.API_URL, // api 的 base_url
-    baseURL:'/api/',
+    baseURL: process.env.API_URL, // api 的 base_url
+    //baseURL:'/api/',
     timeout: 5000 // request timeout
   })
 

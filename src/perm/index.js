@@ -2,6 +2,7 @@ import Vue from 'vue'
 import router from '@/router'
 import store from '@/store'
 import { getCookie } from '@/utils/cookie'
+import { check } from '@/api'
 const whiteList = ['/login'] // no redirect whitelist
 router.beforeEach(async(to, from, next) => {
   // determine whether the user has logged in
@@ -44,7 +45,8 @@ router.beforeEach(async(to, from, next) => {
         //   user_account:'timor',
         //   user_password:111111
         // })
-        // next()
+        // next();
+        check();
       } catch (error) {
         console.log(error)
       }

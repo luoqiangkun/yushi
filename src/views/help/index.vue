@@ -42,7 +42,7 @@ export default {
     
     },
     created(){
-        console.log( this.$store.state );
+        console.log( window.location.href );
     }
 }
 </script>
@@ -52,7 +52,7 @@ export default {
     margin: 10px auto;
     padding: 0;
     text-align: left;
-    min-height: calc(100vh - 337px);
+    min-height: calc(100vh - 317px);
 }
 
 .flex-main {

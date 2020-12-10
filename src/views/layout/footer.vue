@@ -45,7 +45,6 @@ export default {
     height: 500px;
     background: rgba(0,0,0,.7);
     color: #fff;
-    padding: 30px 0;
 }
 .footer-container {
     width: 900px;
@@ -53,6 +52,7 @@ export default {
     text-align: left;
     display: flex;
     justify-content: space-between;
+    padding: 30px 0;
 }
 .footer-container a {
     color: #fff;

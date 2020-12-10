@@ -13,7 +13,8 @@ import { helpDetail } from "@/api"
 export default {
     data(){
         return {
-            helpData:{}
+            helpData:{},
+            helpId:0,
         }
     },
     methods:{
@@ -25,10 +26,19 @@ export default {
            })
        }
     },
+    watch: {
+        '$route': function( from,to,next ){
+           this.helpId = from.params.id
+        },
+        helpId(){
+           this.getHelpDetail(this.helpId)
+        }
+        
+    },
     created(){
-       if(this.$route.params.id){
-           this.getHelpDetail(this.$route.params.id)
-       }
+        if(this.$route.params.id){
+           this.helpId = this.$route.params.id
+        } 
     }
 }
 </script>
